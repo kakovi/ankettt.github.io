@@ -1,49 +1,98 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Форма анкеты</title>
+  <title>Анкета</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #28a745;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #218838;
+    }
+  </style>
 </head>
 <body>
-  <form action="/submit" method="post">
-    <label for="chat_number">№ Чата:</label>
-    <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}"><br>
-    
-    <label for="id">ID:</label>
-    <input type="text" id="id" name="id" required pattern="\d{6}"><br>
-    
-    <label for="name">ФИО:</label>
-    <input type="text" id="name" name="name" required><br>
-    
-    <label for="owner_id">Владелец ID:</label>
-    <input type="text" id="owner_id" name="owner_id" required pattern="@.*"><br>
-    
-    <label for="imei">IMEI:</label>
-    <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*"><br>
-    
-    <label for="phone">Телефон:</label>
-    <input type="text" id="phone" name="phone" required pattern="\+7\d+"><br>
-    
-    <label for="trust_limit">Лимит доверия, руб:</label>
-    <input type="text" id="trust_limit" name="trust_limit" required><br>
-    
-    <label for="comments">Комментарии:</label>
-    <input type="text" id="comments" name="comments"><br>
-    
-    <label for="bank">Банк:</label>
-    <input type="text" id="bank" name="bank"><br>
-    
-    <label for="account1">Счет 1:</label>
-    <input type="text" id="account1" name="account1" required pattern="\d{20}"><br>
-    
-    <label for="bik1">БИК 1:</label>
-    <input type="text" id="bik1" name="bik1" required pattern="\d{9}"><br>
-    
-    <label for="card1">Карта 1:</label>
-    <input type="text" id="card1" name="card1" required pattern="\d{13,19}"><br>
-    
-    <button type="submit">Отправить</button>
-  </form>
+  <div class="container">
+    <h2>Анкета</h2>
+    <form action="https://your-server-url/submit" method="post">
+      <label for="chat_number">№ Чата:</label>
+      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}">
+
+      <label for="id">ID:</label>
+      <input type="text" id="id" name="id" required pattern="\d{6}">
+
+      <label for="name">ФИО:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="owner_id">Владелец ID:</label>
+      <input type="text" id="owner_id" name="owner_id" required pattern="@.*">
+
+      <label for="imei">IMEI:</label>
+      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*">
+
+      <label for="phone">Телефон:</label>
+      <input type="tel" id="phone" name="phone" required pattern="\+7\d+">
+
+      <label for="trust_limit">Лимит доверия, руб:</label>
+      <input type="number" id="trust_limit" name="trust_limit" required>
+
+      <label for="comments">Комментарии:</label>
+      <textarea id="comments" name="comments"></textarea>
+
+      <h3>🏦 Банк</h3>
+      <label for="bank">Банк:</label>
+      <input type="text" id="bank" name="bank">
+
+      <label for="account1">Счет 1:</label>
+      <input type="text" id="account1" name="account1" required pattern="\d{20}">
+
+      <label for="bik1">БИК 1:</label>
+      <input type="text" id="bik1" name="bik1" required pattern="\d{9}">
+
+      <label for="card1">Карта 1:</label>
+      <input type="text" id="card1" name="card1" required pattern="\d{13,19}">
+
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
 </body>
 </html>

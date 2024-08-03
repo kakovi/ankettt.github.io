@@ -28,7 +28,7 @@
       margin-top: 10px;
     }
     input[type="text"], input[type="email"], input[type="tel"], textarea {
-      width: 100%;
+      width: calc(100% - 22px); /* Учитывая padding */
       padding: 10px;
       margin-top: 5px;
       border: 1px solid #ccc;
@@ -83,22 +83,22 @@
     <h2>Анкета</h2>
     <form id="form" action="https://your-server-url/submit" method="post">
       <label for="chat_number">№ Чата:</label>
-      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" title="От 3 до 4 цифр без пробелов">
+      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" title="От 3 до 4 цифр без пробелов" oninput="validateField(this)">
 
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required pattern="\d{6}" title="6 цифр без пробелов">
+      <input type="text" id="id" name="id" required pattern="\d{6}" title="6 цифр без пробелов" oninput="validateField(this)">
 
       <label for="name">ФИО:</label>
       <input type="text" id="name" name="name" required>
 
       <label for="owner_id">Владелец ID:</label>
-      <input type="text" id="owner_id" name="owner_id" required pattern="@.*" title="Начинается с @">
+      <input type="text" id="owner_id" name="owner_id" required pattern="@.*" title="Начинается с @" oninput="validateField(this)">
 
       <label for="imei">IMEI:</label>
-      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" title="Цифры без пробелов, возможно использование '/'">
+      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" title="Цифры без пробелов, возможно использование '/'" oninput="validateField(this)">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" required pattern="\+7\d+" title="Формат номера телефона начинается с +7">
+      <input type="tel" id="phone" name="phone" required pattern="\+7\d+" title="Формат номера телефона начинается с +7" oninput="validateField(this)">
 
       <label for="trust_limit">Лимит доверия, руб:</label>
       <input type="number" id="trust_limit" name="trust_limit" required>
@@ -106,22 +106,22 @@
       <label for="comments">Комментарии:</label>
       <textarea id="comments" name="comments"></textarea>
 
-      <h3>🏦 Банк</h3>
+      <h3>🏦1️⃣ Банк</h3>
       <div id="banks">
         <div class="bank">
           <label for="bank">Банк:</label>
           <input type="text" name="banks[0][bank]" required>
 
           <label for="account1">Счет 1:</label>
-          <input type="text" name="banks[0][account]" required pattern="\d{20}" title="20 цифр без пробелов">
+          <input type="text" name="banks[0][account]" required pattern="\d{20}" title="20 цифр без пробелов" oninput="validateField(this)">
 
           <label for="bik1">БИК 1:</label>
-          <input type="text" name="banks[0][bik]" required pattern="\d{9}" title="9 цифр без пробелов">
+          <input type="text" name="banks[0][bik]" required pattern="\d{9}" title="9 цифр без пробелов" oninput="validateField(this)">
 
           <div class="cards">
             <div class="card">
               <label for="card1">Карта 1:</label>
-              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" title="От 13 до 19 цифр без пробелов">
+              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" title="От 13 до 19 цифр без пробелов" oninput="validateField(this)">
             </div>
           </div>
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -137,24 +137,33 @@
     let bankCount = 1;
     let cardCounts = [1];
 
+    function validateField(field) {
+      if (field.validity.patternMismatch) {
+        field.setCustomValidity(field.title);
+      } else {
+        field.setCustomValidity('');
+      }
+    }
+
     function addBank() {
       const banks = document.getElementById('banks');
       const bank = document.createElement('div');
       bank.className = 'bank';
       bank.innerHTML = `
+        <h3>🏦${bankCount + 1}️⃣ Банк</h3>
         <label for="bank">Банк:</label>
         <input type="text" name="banks[${bankCount}][bank]" required>
 
         <label for="account1">Счет 1:</label>
-        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" title="20 цифр без пробелов">
+        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" title="20 цифр без пробелов" oninput="validateField(this)">
 
         <label for="bik1">БИК 1:</label>
-        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" title="9 цифр без пробелов">
+        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" title="9 цифр без пробелов" oninput="validateField(this)">
 
         <div class="cards">
           <div class="card">
             <label for="card1">Карта 1:</label>
-            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов">
+            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов" oninput="validateField(this)">
           </div>
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -173,7 +182,7 @@
       card.className = 'card';
       card.innerHTML = `
         <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
-        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов">
+        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов" oninput="validateField(this)">
         <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
       `;
       cards.appendChild(card);

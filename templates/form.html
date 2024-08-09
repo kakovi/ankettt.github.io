@@ -82,6 +82,8 @@
   <div class="container">
     <h2>Анкета</h2>
     <form id="form" action="https://5342-176-213-80-27.ngrok-free.app/submit" method="post">
+      <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
+
       <label for="chat_number">№ Чата:</label>
       <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" title="От 3 до 4 цифр без пробелов" onblur="validateField(this)">
 
@@ -137,6 +139,13 @@
     let bankCount = 1;
     let cardCounts = [1];
 
+    // Устанавливаем значение chat_id при загрузке страницы
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const chat_id = urlParams.get('chat_id');
+      document.getElementById('chat_id').value = chat_id;
+    };
+
     function validateField(field) {
       if (field.validity.patternMismatch) {
         field.setCustomValidity(field.title);
@@ -158,7 +167,7 @@
         <label for="account1">Счет 1:</label>
         <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" title="20 цифр без пробелов" onblur="validateField(this)">
 
-        <label for="bik1">БИК 1:</label>
+        <label for="bik1">БИК:</label>
         <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" title="9 цифр без пробелов" onblur="validateField(this)">
 
         <div class="cards">

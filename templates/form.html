@@ -104,7 +104,7 @@
 <body>
   <div class="container">
     <h2>Анкета</h2>
-    <form id="form" action=" https://e279-188-162-54-26.ngrok-free.app/submit" method="post">
+    <form id="form" action="https://e279-188-162-54-26.ngrok-free.app/submit" method="post">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
 
       <label for="chat_number">№ Чата:</label>
@@ -197,7 +197,6 @@
           <div class="card">
             <label for="card1">Карта 1:</label>
             <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов" onblur="validateField(this)">
-            <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
           </div>
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>

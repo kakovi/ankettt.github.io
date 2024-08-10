@@ -57,15 +57,25 @@
     button:hover {
       background: #218838;
     }
+    .remove-btn, .add-btn {
+      width: auto;
+      padding: 5px 10px;
+      font-size: 14px;
+      margin-top: 5px;
+      border-radius: 4px;
+    }
     .remove-btn {
       background: #dc3545;
-      margin-top: 5px;
+      color: #fff;
+      border: none;
     }
     .remove-btn:hover {
       background: #c82333;
     }
     .add-btn {
       background: #007bff;
+      color: #fff;
+      border: none;
     }
     .add-btn:hover {
       background: #0056b3;
@@ -75,6 +85,19 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       padding: 10px;
+    }
+    .add-bank-btn {
+      background: #00aaff;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    .add-bank-btn:hover {
+      background: #0099e6;
     }
   </style>
 </head>
@@ -94,13 +117,13 @@
       <input type="text" id="name" name="name" required>
 
       <label for="owner_id">Владелец ID:</label>
-      <input type="text" id="owner_id" name="owner_id" required pattern="@.*" title="Начинается с @" onblur="validateField(this)">
+      <input type="text" id="owner_id" name="owner_id" required pattern="@.*" title="Начинается с @" onblur="validateField(this)" value="@">
 
       <label for="imei">IMEI:</label>
       <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" title="Цифры без пробелов, возможно использование '/'" onblur="validateField(this)">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" required pattern="\+7\d+" title="Формат номера телефона начинается с +7" onblur="validateField(this)">
+      <input type="tel" id="phone" name="phone" required pattern="\+7\d+" title="Формат номера телефона начинается с +7" onblur="validateField(this)" value="+7">
 
       <label for="trust_limit">Лимит доверия, руб:</label>
       <input type="number" id="trust_limit" name="trust_limit" required>
@@ -124,12 +147,14 @@
             <div class="card">
               <label for="card1">Карта 1:</label>
               <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" title="От 13 до 19 цифр без пробелов" onblur="validateField(this)">
+              <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
             </div>
           </div>
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
+          <button type="button" class="remove-btn" onclick="removeBank(this)">Удалить банк</button>
         </div>
       </div>
-      <button type="button" class="add-btn" onclick="addBank()">Добавить банк</button>
+      <button type="button" class="add-bank-btn" onclick="addBank()">Добавить банк</button>
 
       <button type="submit">Отправить</button>
     </form>
@@ -174,6 +199,7 @@
           <div class="card">
             <label for="card1">Карта 1:</label>
             <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов" onblur="validateField(this)">
+            <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
           </div>
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>

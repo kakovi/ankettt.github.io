@@ -104,7 +104,7 @@
 <body>
   <div class="container">
     <h2>Анкета</h2>
-    <form id="form" action="https://e279-188-162-54-26.ngrok-free.app/submit" method="post">
+    <form id="form" action=" https://e279-188-162-54-26.ngrok-free.app/submit" method="post">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
 
       <label for="chat_number">№ Чата:</label>
@@ -147,11 +147,9 @@
             <div class="card">
               <label for="card1">Карта 1:</label>
               <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" title="От 13 до 19 цифр без пробелов" onblur="validateField(this)">
-              <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
             </div>
           </div>
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
-          <button type="button" class="remove-btn" onclick="removeBank(this)">Удалить банк</button>
         </div>
       </div>
       <button type="button" class="add-bank-btn" onclick="addBank()">Добавить банк</button>
@@ -225,15 +223,24 @@
     }
 
     function removeBank(button) {
+      const banks = document.getElementById('banks');
       const bank = button.parentElement;
-      bank.parentElement.removeChild(bank);
-      bankCount--;
+      if (banks.children.length > 1) {  // Запрет на удаление первой записи банка
+        bank.parentElement.removeChild(bank);
+        bankCount--;
+      } else {
+        alert("Первый банк не может быть удален.");
+      }
     }
 
     function removeCard(button) {
+      const cards = button.parentElement.parentElement;
       const card = button.parentElement;
-      const cards = card.parentElement;
-      cards.removeChild(card);
+      if (cards.children.length > 1) {  // Запрет на удаление первой карты
+        cards.removeChild(card);
+      } else {
+        alert("Первая карта не может быть удалена.");
+      }
     }
   </script>
 </body>

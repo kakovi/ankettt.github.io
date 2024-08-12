@@ -99,41 +99,6 @@
     .add-bank-btn:hover {
       background: #0099e6;
     }
-    /* Стили для окна подтверждения */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-    .modal-content {
-      background-color: #fff;
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 400px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -189,16 +154,8 @@
       </div>
       <button type="button" class="add-bank-btn" onclick="addBank()">Добавить банк</button>
 
-      <button type="submit" onclick="showModal(event)">Отправить</button>
+      <button type="submit">Отправить</button>
     </form>
-  </div>
-
-  <!-- Модальное окно подтверждения -->
-  <div id="confirmationModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <p>Ваша анкета успешно отправлена!</p>
-    </div>
   </div>
 
   <script>
@@ -225,7 +182,7 @@
       const banks = document.getElementById('banks');
       const bank = document.createElement('div');
       bank.className = 'bank';
-      bank.innerHTML = `
+      bank.innerHTML = 
         <h3>🏦${bankCount + 1}️⃣</h3>
         <label for="bank">Банк:</label>
         <input type="text" name="banks[${bankCount}][bank]" required>
@@ -244,7 +201,7 @@
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
         <button type="button" class="remove-btn" onclick="removeBank(this)">Удалить банк</button>
-      `;
+      ;
       banks.appendChild(bank);
       cardCounts.push(1);
       bankCount++;
@@ -256,11 +213,11 @@
       const cardIndex = cardCounts[bankIndex]++;
       const card = document.createElement('div');
       card.className = 'card';
-      card.innerHTML = `
+      card.innerHTML = 
         <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
         <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов" onblur="validateField(this)">
         <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
-      `;
+      ;
       cards.appendChild(card);
     }
 
@@ -282,29 +239,6 @@
         cards.removeChild(card);
       } else {
         alert("Первая карта не может быть удалена.");
-      }
-    }
-
-    // Функции для показа и скрытия модального окна
-    function showModal(event) {
-      event.preventDefault(); // Останавливаем отправку формы, чтобы показать окно
-      document.getElementById("confirmationModal").style.display = "block";
-
-      // Отправляем форму после короткой задержки, чтобы модальное окно успело показаться
-      setTimeout(() => {
-        document.getElementById("form").submit();
-      }, 1000);
-    }
-
-    function closeModal() {
-      document.getElementById("confirmationModal").style.display = "none";
-    }
-
-    // Закрытие модального окна при клике вне его
-    window.onclick = function(event) {
-      const modal = document.getElementById("confirmationModal");
-      if (event.target == modal) {
-        modal.style.display = "none";
       }
     }
   </script>

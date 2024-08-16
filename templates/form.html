@@ -141,13 +141,19 @@
 
     // Устанавливаем значение chat_id при загрузке страницы
     window.onload = function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const chat_id = urlParams.get('chat_id');
-      document.getElementById('chat_id').value = chat_id;
+    const urlParams = new URLSearchParams(window.location.search);
+    const chat_id = urlParams.get('chat_id');
+    document.getElementById('chat_id').value = chat_id;
 
-      // Логирование для проверки chat_id
-      console.log("Переданный chat_id:", chat_id);
-    };
+    // Логирование для проверки chat_id
+    console.log("Переданный chat_id:", chat_id);
+
+    // Добавьте проверку, чтобы убедиться, что chat_id действительно установлен
+    if (!chat_id) {
+        alert("chat_id не найден! Проверьте, правильно ли передается chat_id.");
+    }
+};
+
 
     function validateField(field) {
       if (field.validity.patternMismatch) {

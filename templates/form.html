@@ -139,21 +139,16 @@
     let bankCount = 1;
     let cardCounts = [1];
 
-    // Устанавливаем значение chat_id при загрузке страницы
-    window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const chat_id = urlParams.get('chat_id');
+    // Извлечение chat_id из initData
+    window.Telegram.WebApp.ready();
+    const initData = window.Telegram.WebApp.initData;
+    const initDataObj = Telegram.WebApp.initDataUnsafe;
+    const chat_id = initDataObj.user ? initDataObj.user.id : null;
+
     document.getElementById('chat_id').value = chat_id;
 
     // Логирование для проверки chat_id
-    console.log("Переданный chat_id:", chat_id);
-
-    // Добавьте проверку, чтобы убедиться, что chat_id действительно установлен
-    if (!chat_id) {
-        alert("chat_id не найден! Проверьте, правильно ли передается chat_id.");
-    }
-};
-
+    console.log("Переданный chat_id из initData:", chat_id);
 
     function validateField(field) {
       if (field.validity.patternMismatch) {

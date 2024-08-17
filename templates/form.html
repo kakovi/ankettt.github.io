@@ -57,15 +57,25 @@
     button:hover {
       background: #218838;
     }
+    .remove-btn, .add-btn {
+      width: auto;
+      padding: 5px 10px;
+      font-size: 14px;
+      margin-top: 5px;
+      border-radius: 4px;
+    }
     .remove-btn {
       background: #dc3545;
-      margin-top: 5px;
+      color: #fff;
+      border: none;
     }
     .remove-btn:hover {
       background: #c82333;
     }
     .add-btn {
       background: #007bff;
+      color: #fff;
+      border: none;
     }
     .add-btn:hover {
       background: #0056b3;
@@ -75,6 +85,19 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       padding: 10px;
+    }
+    .add-bank-btn {
+      background: #00aaff;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    .add-bank-btn:hover {
+      background: #0099e6;
     }
   </style>
 </head>
@@ -129,7 +152,7 @@
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
         </div>
       </div>
-      <button type="button" class="add-btn" onclick="addBank()">Добавить банк</button>
+      <button type="button" class="add-bank-btn" onclick="addBank()">Добавить банк</button>
 
       <button type="submit">Отправить</button>
     </form>
@@ -139,16 +162,12 @@
     let bankCount = 1;
     let cardCounts = [1];
 
-    // Извлечение chat_id из initData
-    window.Telegram.WebApp.ready();
-    const initData = window.Telegram.WebApp.initData;
-    const initDataObj = Telegram.WebApp.initDataUnsafe;
-    const chat_id = initDataObj.user ? initDataObj.user.id : null;
-
-    document.getElementById('chat_id').value = chat_id;
-
-    // Логирование для проверки chat_id
-    console.log("Переданный chat_id из initData:", chat_id);
+    // Устанавливаем значение chat_id при загрузке страницы
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const chat_id = urlParams.get('chat_id');
+      document.getElementById('chat_id').value = chat_id;
+    };
 
     function validateField(field) {
       if (field.validity.patternMismatch) {

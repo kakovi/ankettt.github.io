@@ -106,6 +106,7 @@
     <h2>Анкета</h2>
     <form id="form" action="https://e79b-188-162-54-197.ngrok-free.app/submit" method="post">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
+      <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
       <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" title="От 3 до 4 цифр без пробелов" onblur="validateField(this)">
@@ -115,9 +116,6 @@
 
       <label for="name">ФИО:</label>
       <input type="text" id="name" name="name" required>
-
-      <label for="owner_id">Владелец ID:</label>
-      <input type="text" id="owner_id" name="owner_id" required pattern="@.*" title="Начинается с @" onblur="validateField(this)" value="@">
 
       <label for="imei">IMEI:</label>
       <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" title="Цифры без пробелов, возможно использование '/'" onblur="validateField(this)">
@@ -130,6 +128,9 @@
 
       <label for="comments">Комментарии:</label>
       <textarea id="comments" name="comments"></textarea>
+
+      <label for="add_to_chat">Добавить в чат:</label>
+      <input type="text" id="add_to_chat" name="add_to_chat" required pattern="@.*" title="Начинается с @" value="@" onblur="validateField(this)">
 
       <h3>🏦1️⃣</h3>
       <div id="banks">

@@ -252,6 +252,22 @@
       const submitBtn = document.getElementById('submit-btn');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Отправка...';
+
+      fetch(event.target.action, {
+        method: 'POST',
+        body: new FormData(event.target)
+      })
+      .then(response => response.text())
+      .then(html => {
+        document.body.innerHTML = html;
+      })
+      .catch(error => {
+        alert('Произошла ошибка при отправке. Пожалуйста, попробуйте снова.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Отправить';
+      });
+
+      event.preventDefault();
     }
   </script>
 </body>

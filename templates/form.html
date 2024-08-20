@@ -255,6 +255,8 @@
     }
 
     function handleSubmit(event) {
+      const phoneInput = document.getElementById('phone');
+      phoneInput.value = phoneInput.value.replace(/\D/g, ''); // Удаление всех нецифровых символов
       const submitBtn = document.getElementById('submit-btn');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Отправка...';

@@ -114,45 +114,45 @@
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
-      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" title="От 3 до 4 цифр без пробелов" onblur="validateField(this)">
+      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата" onblur="validateField(this)">
 
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required pattern="\d{6}" title="6 цифр без пробелов" onblur="validateField(this)">
+      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 цифр без пробелов" placeholder="Введите ID" onblur="validateField(this)">
 
       <label for="name">ФИО:</label>
-      <input type="text" id="name" name="name" required>
+      <input type="text" id="name" name="name" required placeholder="Введите ФИО">
 
       <label for="imei">IMEI:</label>
-      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" title="Цифры без пробелов, возможно использование '/'" onblur="validateField(this)">
+      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" maxlength="15" title="Цифры без пробелов, возможно использование '/'" placeholder="Введите IMEI" onblur="validateField(this)">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" required pattern="\+7\d+" title="Формат номера телефона начинается с +7" onblur="validateField(this)" value="+7">
+      <input type="tel" id="phone" name="phone" required pattern="\+7\d{10}" maxlength="12" title="Формат номера телефона начинается с +7 и включает 10 цифр" onblur="validateField(this)" value="+7">
 
       <label for="trust_limit">Лимит доверия, руб:</label>
-      <input type="number" id="trust_limit" name="trust_limit" required>
+      <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия">
 
       <label for="comments">Комментарии:</label>
-      <textarea id="comments" name="comments"></textarea>
+      <textarea id="comments" name="comments" placeholder="Введите комментарии (если есть)"></textarea>
 
       <label for="add_to_chat">Добавить в чат:</label>
-      <input type="text" id="add_to_chat" name="add_to_chat" required pattern="@.*" title="Начинается с @" value="@" onblur="validateField(this)">
+      <input type="text" id="add_to_chat" name="add_to_chat" required pattern="@.*" maxlength="32" title="Начинается с @" placeholder="@username" value="@" onblur="validateField(this)">
 
       <h3>🏦1️⃣</h3>
       <div id="banks">
         <div class="bank">
           <label for="bank">Банк:</label>
-          <input type="text" name="banks[0][bank]" required>
+          <input type="text" name="banks[0][bank]" required placeholder="Введите название банка">
 
           <label for="account1">Счет 1:</label>
-          <input type="text" name="banks[0][account]" required pattern="\d{20}" title="20 цифр без пробелов" onblur="validateField(this)">
+          <input type="text" name="banks[0][account]" required pattern="\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" onblur="validateField(this)">
 
           <label for="bik1">БИК:</label>
-          <input type="text" name="banks[0][bik]" required pattern="\d{9}" title="9 цифр без пробелов" onblur="validateField(this)">
+          <input type="text" name="banks[0][bik]" required pattern="\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" onblur="validateField(this)">
 
           <div class="cards">
             <div class="card">
               <label for="card1">Карта 1:</label>
-              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" title="От 13 до 19 цифр без пробелов" onblur="validateField(this)">
+              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
             </div>
           </div>
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -191,18 +191,18 @@
       bank.innerHTML = `
         <h3>🏦${bankCount + 1}️⃣</h3>
         <label for="bank">Банк:</label>
-        <input type="text" name="banks[${bankCount}][bank]" required>
+        <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
 
         <label for="account1">Счет 1:</label>
-        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" title="20 цифр без пробелов" onblur="validateField(this)">
+        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" onblur="validateField(this)">
 
         <label for="bik1">БИК:</label>
-        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" title="9 цифр без пробелов" onblur="validateField(this)">
+        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" onblur="validateField(this)">
 
         <div class="cards">
           <div class="card">
             <label for="card1">Карта 1:</label>
-            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов" onblur="validateField(this)">
+            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
           </div>
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -221,7 +221,7 @@
       card.className = 'card';
       card.innerHTML = `
         <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
-        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" title="От 13 до 19 цифр без пробелов" onblur="validateField(this)">
+        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
         <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
       `;
       cards.appendChild(card);

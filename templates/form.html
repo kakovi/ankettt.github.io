@@ -112,7 +112,7 @@
 <body>
   <div class="container">
     <h2>Анкета</h2>
-    <form id="form" action="https://6ef4-2a03-d000-8602-8a05-c8d9-b52a-cf38-64c8.ngrok-free.app" method="post" onsubmit="handleSubmit(event)">
+    <form id="form" action="https://e79b-188-162-54-197.ngrok-free.app/submit" method="post" onsubmit="handleSubmit(event)">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
@@ -129,7 +129,7 @@
       <input type="text" id="imei" name="imei" required title="15 цифр без пробелов" placeholder="_______________" maxlength="15" oninput="validateField(this)">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" required title="Формат номера телефона начинается с +7" placeholder="+7 (___) ___-__-__">
+      <input type="tel" id="phone" name="phone" required title="Формат номера телефона начинается с +7" value="+7" placeholder="+7 (___) ___-__-__">
 
       <label for="trust_limit">Лимит доверия, руб:</label>
       <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия">
@@ -173,10 +173,15 @@
       new Cleave('#phone', {
         phone: true,
         phoneRegionCode: 'RU',
+        prefix: '+7',
+        noImmediatePrefix: true,
+        rawValueTrimPrefix: true,
         delimiters: [' ', '(', ')', '-', '-'],
+        blocks: [0, 3, 3, 2, 2],
+        numericOnly: true,
         onValueChanged: function(e) {
           const rawValue = e.target.rawValue;
-          document.getElementById('phone').value = '+' + rawValue.replace(/\D/g, '');
+          document.getElementById('phone').value = '+7' + rawValue.replace(/\D/g, '');
         }
       });
 

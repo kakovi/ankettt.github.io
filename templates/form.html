@@ -114,28 +114,28 @@
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
-      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 цифр без пробелов" placeholder="1234" onblur="validateField(this)">
+      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата" onblur="validateField(this)">
 
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 цифр без пробелов" placeholder="123456" onblur="validateField(this)">
+      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 цифр без пробелов" placeholder="Введите ID" onblur="validateField(this)">
 
       <label for="name">ФИО:</label>
-      <input type="text" id="name" name="name" required placeholder="Иванов Иван Иванович">
+      <input type="text" id="name" name="name" required placeholder="Введите ФИО">
 
       <label for="imei">IMEI:</label>
-      <input type="text" id="imei" name="imei" required pattern="\d{15}" maxlength="15" title="15 цифры без пробелов" placeholder="123456789012345" onblur="validateField(this)">
+      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" maxlength="15" title="Цифры без пробелов, возможно использование '/'" placeholder="Введите IMEI" onblur="validateField(this)">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" required pattern="\+7\d{10}" maxlength="12" title="10 цифр без пробелов" placeholder="000-000-00-00" onblur="validateField(this)" value="+7">
+      <input type="tel" id="phone" name="phone" class="mask-phone" required title="Формат номера телефона начинается с +7" placeholder="Номер телефона">
 
-      <label for="trust_limit">Лимит доверия, в тыс. руб:</label>
-      <input type="number" id="trust_limit" name="trust_limit" required placeholder="100">
+      <label for="trust_limit">Лимит доверия, руб:</label>
+      <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия">
 
       <label for="comments">Комментарии:</label>
-      <textarea id="comments" name="comments" placeholder="Введите название вашей команды"></textarea>
+      <textarea id="comments" name="comments" placeholder="Введите комментарии (если есть)"></textarea>
 
       <label for="add_to_chat">Добавить в чат:</label>
-      <input type="text" id="add_to_chat" name="add_to_chat" required pattern="@.*" maxlength="32" placeholder="@username" value="@" onblur="validateField(this)">
+      <input type="text" id="add_to_chat" name="add_to_chat" required pattern="@.*" maxlength="32" title="Начинается с @" placeholder="@username" value="@" onblur="validateField(this)">
 
       <h3>🏦1️⃣</h3>
       <div id="banks">
@@ -164,7 +164,13 @@
     </form>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
   <script>
+    $(document).ready(function(){
+        $('.mask-phone').mask('+7 (999) 999-99-99');
+    });
+
     let bankCount = 1;
     let cardCounts = [1];
 

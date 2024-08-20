@@ -119,22 +119,22 @@
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
-      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата">
+      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата" inputmode="numeric">
 
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 цифр без пробелов" placeholder="Введите ID">
+      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 цифр без пробелов" placeholder="Введите ID" inputmode="numeric">
 
       <label for="name">ФИО:</label>
       <input type="text" id="name" name="name" required placeholder="Введите ФИО">
 
       <label for="imei">IMEI:</label>
-      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" maxlength="15" title="Цифры без пробелов, возможно использование '/'" placeholder="Введите IMEI">
+      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" maxlength="15" title="Цифры без пробелов, возможно использование '/'" placeholder="Введите IMEI" inputmode="numeric">
 
       <label for="phone">Телефон:</label>
       <input type="tel" id="phone" name="phone" class="mask-phone" required title="Формат номера телефона начинается с +7" placeholder="Номер телефона">
 
       <label for="trust_limit">Лимит доверия, руб:</label>
-      <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия">
+      <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия" inputmode="numeric">
 
       <label for="comments">Комментарии:</label>
       <textarea id="comments" name="comments" placeholder="Введите комментарии (если есть)"></textarea>
@@ -149,15 +149,15 @@
           <input type="text" name="banks[0][bank]" required placeholder="Введите название банка">
 
           <label for="account1">Счет 1:</label>
-          <input type="text" name="banks[0][account]" required pattern="\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета">
+          <input type="text" name="banks[0][account]" required pattern="\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" inputmode="numeric">
 
           <label for="bik1">БИК:</label>
-          <input type="text" name="banks[0][bik]" required pattern="\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК">
+          <input type="text" name="banks[0][bik]" required pattern="\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" inputmode="numeric">
 
           <div class="cards">
             <div class="card">
               <label for="card1">Карта 1:</label>
-              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты">
+              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
             </div>
           </div>
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -186,6 +186,11 @@
         // Проверка всех полей на правильность при потере фокуса
         $('input, textarea').on('blur', function() {
             validateField(this);
+        });
+
+        // Запрет на ввод нецифровых символов
+        $('input[inputmode="numeric"]').on('input', function() {
+            this.value = this.value.replace(/\D/g, '');
         });
     });
 
@@ -217,15 +222,15 @@
         <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
 
         <label for="account1">Счет 1:</label>
-        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета">
+        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" inputmode="numeric">
 
         <label for="bik1">БИК:</label>
-        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК">
+        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" inputmode="numeric">
 
         <div class="cards">
           <div class="card">
             <label for="card1">Карта 1:</label>
-            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты">
+            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
           </div>
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -244,7 +249,7 @@
       card.className = 'card';
       card.innerHTML = `
         <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
-        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты">
+        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
         <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
       `;
       cards.appendChild(card);

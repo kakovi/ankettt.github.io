@@ -43,9 +43,6 @@
       -webkit-appearance: none;
       margin: 0;
     }
-    input.error {
-      border-color: red;
-    }
     button {
       width: 100%;
       padding: 10px;
@@ -117,19 +114,19 @@
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
-      <input type="text" id="chat_number" name="chat_number" required title="От 3 до 4 цифр без пробелов" placeholder="____" minlength="3" maxlength="4" oninput="validateField(this)">
+      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата" onblur="validateField(this)">
 
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required title="6 цифр без пробелов" placeholder="______" maxlength="6" oninput="validateField(this)">
+      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 цифр без пробелов" placeholder="Введите ID" onblur="validateField(this)">
 
       <label for="name">ФИО:</label>
       <input type="text" id="name" name="name" required placeholder="Введите ФИО">
 
       <label for="imei">IMEI:</label>
-      <input type="text" id="imei" name="imei" required title="15 цифр без пробелов" placeholder="_______________" maxlength="15" oninput="validateField(this)">
+      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" maxlength="15" title="Цифры без пробелов, возможно использование '/'" placeholder="Введите IMEI" onblur="validateField(this)">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" required title="Формат номера телефона начинается с +7" value="+7" placeholder="+7 (___) ___-__-__">
+      <input type="tel" id="phone" name="phone" class="mask-phone" required title="Формат номера телефона начинается с +7" placeholder="Номер телефона">
 
       <label for="trust_limit">Лимит доверия, руб:</label>
       <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия">
@@ -147,15 +144,15 @@
           <input type="text" name="banks[0][bank]" required placeholder="Введите название банка">
 
           <label for="account1">Счет 1:</label>
-          <input type="text" name="banks[0][account]" required title="20 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-account">
+          <input type="text" name="banks[0][account]" required pattern="\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" onblur="validateField(this)">
 
           <label for="bik1">БИК:</label>
-          <input type="text" name="banks[0][bik]" required title="9 цифр без пробелов" placeholder="_________" class="mask-bik">
+          <input type="text" name="banks[0][bik]" required pattern="\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" onblur="validateField(this)">
 
           <div class="cards">
             <div class="card">
               <label for="card1">Карта 1:</label>
-              <input type="text" name="banks[0][cards][0]" required title="От 13 до 19 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-card">
+              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
             </div>
           </div>
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -167,69 +164,11 @@
     </form>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      new Cleave('#phone', {
-        phone: true,
-        phoneRegionCode: 'RU',
-        prefix: '+7',
-        noImmediatePrefix: true,
-        rawValueTrimPrefix: true,
-        delimiters: [' ', '(', ')', '-', '-'],
-        blocks: [0, 3, 3, 2, 2],
-        numericOnly: true,
-        onValueChanged: function(e) {
-          const rawValue = e.target.rawValue;
-          document.getElementById('phone').value = '+7' + rawValue.replace(/\D/g, '');
-        }
-      });
-
-      new Cleave('#chat_number', {
-        numericOnly: true,
-        blocks: [4],
-        onValueChanged: function(e) {
-          const rawValue = e.target.rawValue;
-          if (rawValue.length < 3 || rawValue.length > 4) {
-            e.target.classList.add('error');
-          } else {
-            e.target.classList.remove('error');
-          }
-        }
-      });
-
-      new Cleave('#id', {
-        numericOnly: true,
-        blocks: [6]
-      });
-
-      new Cleave('#imei', {
-        numericOnly: true,
-        blocks: [15]
-      });
-
-      document.querySelectorAll('.mask-account').forEach(function(element) {
-        new Cleave(element, {
-          numericOnly: true,
-          blocks: [4, 4, 4, 4, 4],
-          delimiters: [' ']
-        });
-      });
-
-      document.querySelectorAll('.mask-bik').forEach(function(element) {
-        new Cleave(element, {
-          numericOnly: true,
-          blocks: [9]
-        });
-      });
-
-      document.querySelectorAll('.mask-card').forEach(function(element) {
-        new Cleave(element, {
-          numericOnly: true,
-          blocks: [4, 4, 4, 4, 4],
-          delimiters: [' ']
-        });
-      });
+    $(document).ready(function(){
+        $('.mask-phone').mask('+7 (999) 999-99-99');
     });
 
     let bankCount = 1;
@@ -243,12 +182,12 @@
     };
 
     function validateField(field) {
-      const isValid = field.value.length >= field.getAttribute('minlength') && field.value.length <= field.getAttribute('maxlength');
-      if (!isValid) {
-        field.classList.add('error');
+      if (field.validity.patternMismatch) {
+        field.setCustomValidity(field.title);
       } else {
-        field.classList.remove('error');
+        field.setCustomValidity('');
       }
+      field.reportValidity();
     }
 
     function addBank() {
@@ -261,15 +200,15 @@
         <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
 
         <label for="account1">Счет 1:</label>
-        <input type="text" name="banks[${bankCount}][account]" required title="20 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-account">
+        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" onblur="validateField(this)">
 
         <label for="bik1">БИК:</label>
-        <input type="text" name="banks[${bankCount}][bik]" required title="9 цифр без пробелов" placeholder="_________" class="mask-bik">
+        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" onblur="validateField(this)">
 
         <div class="cards">
           <div class="card">
             <label for="card1">Карта 1:</label>
-            <input type="text" name="banks[${bankCount}][cards][0]" required title="От 13 до 19 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-card">
+            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
           </div>
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -278,24 +217,6 @@
       banks.appendChild(bank);
       cardCounts.push(1);
       bankCount++;
-
-      // Применение масок к новым элементам
-      new Cleave(bank.querySelector('.mask-account'), {
-        numericOnly: true,
-        blocks: [4, 4, 4, 4, 4],
-        delimiters: [' ']
-      });
-
-      new Cleave(bank.querySelector('.mask-bik'), {
-        numericOnly: true,
-        blocks: [9]
-      });
-
-      new Cleave(bank.querySelector('.mask-card'), {
-        numericOnly: true,
-        blocks: [4, 4, 4, 4, 4],
-        delimiters: [' ']
-      });
     }
 
     function addCard(button) {
@@ -306,16 +227,10 @@
       card.className = 'card';
       card.innerHTML = `
         <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
-        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required title="От 13 до 19 цифр без пробелов" placeholder="____ ____ ____ ____ ____" class="mask-card">
+        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
         <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
       `;
       cards.appendChild(card);
-
-      new Cleave(card.querySelector('.mask-card'), {
-        numericOnly: true,
-        blocks: [4, 4, 4, 4, 4],
-        delimiters: [' ']
-      });
     }
 
     function removeBank(button) {
@@ -340,10 +255,8 @@
     }
 
     function handleSubmit(event) {
-      const accountInputs = document.querySelectorAll('.mask-account');
-      const cardInputs = document.querySelectorAll('.mask-card');
-      accountInputs.forEach(input => input.value = input.value.replace(/\D/g, '')); // Удаление пробелов из номеров счетов
-      cardInputs.forEach(input => input.value = input.value.replace(/\D/g, '')); // Удаление пробелов из номеров карт
+      const phoneInput = document.getElementById('phone');
+      phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`; // Удаление всех нецифровых символов, но оставляем "+"
       const submitBtn = document.getElementById('submit-btn');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Отправка...';

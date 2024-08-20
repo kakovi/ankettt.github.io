@@ -109,7 +109,7 @@
 <body>
   <div class="container">
     <h2>Анкета</h2>
-    <form id="form" action="https://767f-188-162-54-192.ngrok-free.app/submit" method="post" onsubmit="handleSubmit(event)">
+    <form id="form" action="https://73f9-188-162-54-239.ngrok-free.app/submit" method="post" onsubmit="handleSubmit(event)">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
@@ -252,22 +252,6 @@
       const submitBtn = document.getElementById('submit-btn');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Отправка...';
-
-      fetch(event.target.action, {
-        method: 'POST',
-        body: new FormData(event.target)
-      })
-      .then(response => response.text())
-      .then(html => {
-        document.body.innerHTML = html;
-      })
-      .catch(error => {
-        alert('Произошла ошибка при отправке. Пожалуйста, попробуйте снова.');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Отправить';
-      });
-
-      event.preventDefault();
     }
   </script>
 </body>

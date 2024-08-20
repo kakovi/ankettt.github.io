@@ -131,7 +131,7 @@
       <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" maxlength="15" title="Цифры без пробелов, возможно использование '/'" placeholder="Введите IMEI">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" class="mask-phone" required title="Формат номера телефона начинается с +7"
+      <input type="tel" id="phone" name="phone" class="mask-phone" required title="Формат номера телефона начинается с +7" placeholder="Номер телефона">
 
       <label for="trust_limit">Лимит доверия, руб:</label>
       <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия">
@@ -174,13 +174,18 @@
   <script>
     $(document).ready(function(){
         $('.mask-phone').mask('+7 (999) 999-99-99');
-        
+
         // Установить курсор в начало при фокусе на поле телефона
         $('#phone').focus(function(){
             let $this = $(this);
             setTimeout(function(){
                 $this[0].setSelectionRange(4, 4); // Установить курсор после +7
             }, 10);
+        });
+
+        // Проверка всех полей на правильность при потере фокуса
+        $('input, textarea').on('blur', function() {
+            validateField(this);
         });
     });
 
@@ -195,7 +200,7 @@
     };
 
     function validateField(field) {
-      if (field.validity.patternMismatch || field.value.trim() === "") {
+      if (!field.checkValidity()) {
         field.classList.add('error');
       } else {
         field.classList.remove('error');

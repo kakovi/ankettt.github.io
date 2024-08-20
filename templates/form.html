@@ -43,6 +43,9 @@
       -webkit-appearance: none;
       margin: 0;
     }
+    input.error {
+      border-color: red;
+    }
     button {
       width: 100%;
       padding: 10px;
@@ -189,11 +192,10 @@
 
     function validateField(field) {
       if (field.validity.patternMismatch) {
-        field.setCustomValidity(field.title);
+        field.classList.add('error');
       } else {
-        field.setCustomValidity('');
+        field.classList.remove('error');
       }
-      field.reportValidity();
     }
 
     function addBank() {

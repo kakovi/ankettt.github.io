@@ -119,25 +119,25 @@
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
-      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата" inputmode="numeric">
+      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 значений" placeholder="Введите 3-4 значный №" inputmode="numeric">
 
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 цифр без пробелов" placeholder="Введите ID" inputmode="numeric">
+      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 значений" placeholder="Введите 6-ти значный №" inputmode="numeric">
 
       <label for="name">ФИО:</label>
-      <input type="text" id="name" name="name" required placeholder="Введите ФИО">
+      <input type="text" id="name" name="name" required placeholder="Иванов Иван Иванович">
 
       <label for="imei">IMEI:</label>
-      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" maxlength="15" title="Цифры без пробелов, возможно использование '/'" placeholder="Введите IMEI" inputmode="numeric">
+      <input type="text" id="imei" name="imei" required pattern="\d{15}" maxlength="15" title="15 значений" placeholder="Введите 15-ти значный IMEI" inputmode="numeric">
 
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" class="mask-phone" required title="Формат номера телефона начинается с +7" placeholder="Номер телефона">
+      <input type="tel" id="phone" name="phone" class="mask-phone" required >
 
-      <label for="trust_limit">Лимит доверия, руб:</label>
-      <input type="number" id="trust_limit" name="trust_limit" required placeholder="Введите лимит доверия" inputmode="numeric">
+      <label for="trust_limit">Лимит доверия, в тыс. руб:</label>
+      <input type="text" id="trust_limit" name="trust_limit" required placeholder="Без 000 в конце" inputmode="numeric">
 
-      <label for="comments">Комментарии:</label>
-      <textarea id="comments" name="comments" placeholder="Введите комментарии (если есть)"></textarea>
+      <label for="comments">Название вашей команды:</label>
+      <textarea id="comments" name="comments" placeholder="Введите название вашей группы в тг"></textarea>
 
       <label for="add_to_chat">Добавить в чат:</label>
       <input type="text" id="add_to_chat" name="add_to_chat" required pattern="@.*" maxlength="32" title="Начинается с @" placeholder="@username" value="@" onblur="validateField(this)">
@@ -280,6 +280,16 @@
       const phoneInput = document.getElementById('phone');
       phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`; // Удаление всех нецифровых символов, но оставляем "+"
       
+      // Добавление "к" к значению "Лимит доверия, руб"
+      const trustLimitInput = document.getElementById('trust_limit');
+      trustLimitInput.value = `${trustLimitInput.value}к`;
+
+      // Добавление "Под КЭШ" в начало комментариев
+      const commentsInput = document.getElementById('comments');
+      if (commentsInput.value.trim() !== "") {
+        commentsInput.value = `Под КЭШ ${commentsInput.value}`;
+      }
+
       // Валидация всех полей перед отправкой
       const fields = document.querySelectorAll('input[required], textarea[required]');
       let valid = true;

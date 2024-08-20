@@ -114,16 +114,16 @@
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
-      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата" onblur="validateField(this)">
+      <input type="text" id="chat_number" name="chat_number" required title="От 3 до 4 цифр без пробелов" placeholder="Введите № чата">
 
       <label for="id">ID:</label>
-      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 цифр без пробелов" placeholder="Введите ID" onblur="validateField(this)">
+      <input type="text" id="id" name="id" required title="6 цифр без пробелов" placeholder="Введите ID">
 
       <label for="name">ФИО:</label>
       <input type="text" id="name" name="name" required placeholder="Введите ФИО">
 
       <label for="imei">IMEI:</label>
-      <input type="text" id="imei" name="imei" required pattern="\d+(\/\d+)*" maxlength="15" title="Цифры без пробелов, возможно использование '/'" placeholder="Введите IMEI" onblur="validateField(this)">
+      <input type="text" id="imei" name="imei" required title="15 цифр без пробелов" placeholder="Введите IMEI">
 
       <label for="phone">Телефон:</label>
       <input type="tel" id="phone" name="phone" class="mask-phone" required title="Формат номера телефона начинается с +7" placeholder="Номер телефона">
@@ -144,15 +144,15 @@
           <input type="text" name="banks[0][bank]" required placeholder="Введите название банка">
 
           <label for="account1">Счет 1:</label>
-          <input type="text" name="banks[0][account]" required pattern="\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" onblur="validateField(this)">
+          <input type="text" name="banks[0][account]" class="mask-account" required title="20 цифр без пробелов" placeholder="Введите номер счета">
 
           <label for="bik1">БИК:</label>
-          <input type="text" name="banks[0][bik]" required pattern="\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" onblur="validateField(this)">
+          <input type="text" name="banks[0][bik]" class="mask-bik" required title="9 цифр без пробелов" placeholder="Введите БИК">
 
           <div class="cards">
             <div class="card">
               <label for="card1">Карта 1:</label>
-              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
+              <input type="text" name="banks[0][cards][0]" class="mask-card" required title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты">
             </div>
           </div>
           <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -169,6 +169,12 @@
   <script>
     $(document).ready(function(){
         $('.mask-phone').mask('+7 (999) 999-99-99');
+        $('#chat_number').mask('9999'); // Маска для номера чата
+        $('#id').mask('999999'); // Маска для ID
+        $('#imei').mask('999999999999999'); // Маска для IMEI
+        $('.mask-account').mask('9999 9999 9999 9999 9999'); // Маска для счета
+        $('.mask-bik').mask('999999999'); // Маска для БИК
+        $('.mask-card').mask('9999 9999 9999 9999 9999'); // Маска для карты
     });
 
     let bankCount = 1;
@@ -200,15 +206,15 @@
         <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
 
         <label for="account1">Счет 1:</label>
-        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" onblur="validateField(this)">
+        <input type="text" name="banks[${bankCount}][account]" class="mask-account" required title="20 цифр без пробелов" placeholder="Введите номер счета">
 
         <label for="bik1">БИК:</label>
-        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" onblur="validateField(this)">
+        <input type="text" name="banks[${bankCount}][bik]" class="mask-bik" required title="9 цифр без пробелов" placeholder="Введите БИК">
 
         <div class="cards">
           <div class="card">
             <label for="card1">Карта 1:</label>
-            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
+            <input type="text" name="banks[${bankCount}][cards][0]" class="mask-card" required title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты">
           </div>
         </div>
         <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
@@ -217,6 +223,10 @@
       banks.appendChild(bank);
       cardCounts.push(1);
       bankCount++;
+      
+      $('.mask-account').mask('9999 9999 9999 9999 9999'); // Маска для счета
+      $('.mask-bik').mask('999999999'); // Маска для БИК
+      $('.mask-card').mask('9999 9999 9999 9999 9999'); // Маска для карты
     }
 
     function addCard(button) {
@@ -227,10 +237,12 @@
       card.className = 'card';
       card.innerHTML = `
         <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
-        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" onblur="validateField(this)">
+        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" class="mask-card" required title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты">
         <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
       `;
       cards.appendChild(card);
+      
+      $('.mask-card').mask('9999 9999 9999 9999 9999'); // Маска для карты
     }
 
     function removeBank(button) {
@@ -256,7 +268,11 @@
 
     function handleSubmit(event) {
       const phoneInput = document.getElementById('phone');
+      const accountInputs = document.querySelectorAll('.mask-account');
+      const cardInputs = document.querySelectorAll('.mask-card');
       phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`; // Удаление всех нецифровых символов, но оставляем "+"
+      accountInputs.forEach(input => input.value = input.value.replace(/\D/g, '')); // Удаление пробелов из номеров счетов
+      cardInputs.forEach(input => input.value = input.value.replace(/\D/g, '')); // Удаление пробелов из номеров карт
       const submitBtn = document.getElementById('submit-btn');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Отправка...';

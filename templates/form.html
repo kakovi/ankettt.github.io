@@ -178,6 +178,14 @@
         $('.mask-account').mask('9999 9999 9999 9999 9999'); // Маска для счета
         $('.mask-bik').mask('999999999'); // Маска для БИК
         $('.mask-card').mask('9999 9999 9999 9999 9999'); // Маска для карты
+
+        // Установка курсора в начало при фокусе на поле
+        $('input').on('focus', function() {
+          let self = this;
+          setTimeout(function() {
+            self.selectionStart = self.selectionEnd = 0;
+          }, 0);
+        });
     });
 
     let bankCount = 1;
@@ -191,7 +199,7 @@
     };
 
     function validateField(field) {
-      if (field.validity.patternMismatch) {
+      if (field.validity.patternMismatch || field.value.length !== field.getAttribute('maxlength')) {
         field.classList.add('error');
       } else {
         field.classList.remove('error');
@@ -229,6 +237,14 @@
       $('.mask-account').mask('9999 9999 9999 9999 9999'); // Маска для счета
       $('.mask-bik').mask('999999999'); // Маска для БИК
       $('.mask-card').mask('9999 9999 9999 9999 9999'); // Маска для карты
+
+      // Установка курсора в начало при фокусе на поле
+      $('input').on('focus', function() {
+        let self = this;
+        setTimeout(function() {
+          self.selectionStart = self.selectionEnd = 0;
+        }, 0);
+      });
     }
 
     function addCard(button) {
@@ -245,6 +261,14 @@
       cards.appendChild(card);
       
       $('.mask-card').mask('9999 9999 9999 9999 9999'); // Маска для карты
+
+      // Установка курсора в начало при фокусе на поле
+      $('input').on('focus', function() {
+        let self = this;
+        setTimeout(function() {
+          self.selectionStart = self.selectionEnd = 0;
+        }, 0);
+      });
     }
 
     function removeBank(button) {

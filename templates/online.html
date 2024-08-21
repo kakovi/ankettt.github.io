@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анкета Онлайн</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="email"], input[type="tel"], textarea {
+      width: calc(100% - 22px); /* Учитывая padding */
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    input.error, textarea.error {
+      border-color: red;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #28a745;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+    button:disabled {
+      background: #c3e6cb;
+      cursor: not-allowed;
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    .bank, .card {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Анкета Онлайн</h2>
+    <form id="form" action="https://ваш_сервер/submit_online" method="post" onsubmit="return handleSubmit(event)">
+      <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
+      <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
+
+      <label for="chat_number">№ Чата:</label>
+      <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 значений" placeholder="Введите 3-4 значный №" inputmode="numeric">
+
+      <label for="id">ID:</label>
+      <input type="text" id="id" name="id" required pattern="\d{6}" maxlength="6" title="6 значений" placeholder="Введите 6-ти значный №" inputmode="numeric">
+
+      <label for="name">ФИО:</label>
+      <input type="text" id="name" name="name" required placeholder="Иванов Иван Иванович">
+
+      <label for="deposit">Депозит:</label>
+      <input type="text" id="deposit" name="deposit" required placeholder="Введите сумму" inputmode="numeric">
+
+      <label for="trust_limit">Лимит доверия, в тыс. руб:</label>
+      <input type="text" id="trust_limit" name="trust_limit" required placeholder="Введите сумму без 000 в конце" inputmode="numeric">
+
+      <label for="imei">IMEI:</label>
+      <input type="text" id="imei" name="imei" required pattern="\d{15}" maxlength="15" title="15 значений" placeholder="Введите 15-ти значный №" inputmode="numeric">
+
+      <label for="phone">Телефон:</label>
+      <input type="tel" id="phone" name="phone" class="mask-phone" placeholder="+7 (___) ___-__-__" required >
+
+      <label for="comments">Комментарии:</label>
+      <textarea id="comments" name="comments" placeholder="Введите комментарий"></textarea>
+
+      <div id="banks">
+        <div class="bank">
+          <label for="bank">Банк:</label>
+          <input type="text" name="banks[0][bank]" required placeholder="Введите название банка">
+
+          <label for="account1">Счет 1:</label>
+          <input type="text" name="banks[0][account]" required pattern="\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" inputmode="numeric">
+
+          <label for="bik1">БИК:</label>
+          <input type="text" name="banks[0][bik]" required pattern="\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" inputmode="numeric">
+
+          <div class="cards">
+            <div class="card">
+              <label for="card1">Карта 1:</label>
+              <input type="text" name="banks[0][cards][0]" required pattern="\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
+        </div>
+      </div>
+      <button type="button" class="add-bank-btn" onclick="addBank()">Добавить банк</button>
+
+      <button type="submit" id="submit-btn">Отправить</button>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+  <script>
+    $(document).ready(function(){
+        $('.mask-phone').mask('+7 (999) 999-99-99');
+
+        // Установить курсор в начало при фокусе на поле телефона
+        $('#phone').focus(function(){
+            let $this = $(this);
+            setTimeout(function(){
+                $this[0].setSelectionRange(4, 4); // Установить курсор после +7
+            }, 10);
+        });
+
+        // Проверка всех полей на правильность при потере фокуса
+        $('input, textarea').on('blur', function() {
+            validateField(this);
+        });
+
+        // Запрет на ввод нецифровых символов
+        $('input[inputmode="numeric"]').on('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+    });
+
+    let bankCount = 1;
+    let cardCounts = [1];
+
+    // Устанавливаем значение chat_id при загрузке страницы
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const chat_id = urlParams.get('chat_id');
+      document.getElementById('chat_id').value = chat_id;
+    };
+
+    function validateField(field) {
+      if (!field.checkValidity()) {
+        field.classList.add('error');
+      } else {
+        field.classList.remove('error');
+      }
+    }
+
+    function addBank() {
+      const banks = document.getElementById('banks');
+      const bank = document.createElement('div');
+      bank.className = 'bank';
+      bank.innerHTML = `
+        <label for="bank">Банк:</label>
+        <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
+
+        <label for="account1">Счет 1:</label>
+        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" inputmode="numeric">
+
+        <label for="bik1">БИК:</label>
+        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" inputmode="numeric">
+
+        <div class="cards">
+          <div class="card">
+            <label for="card1">Карта 1:</label>
+            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
+          </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
+        <button type="button" class="remove-btn" onclick="removeBank(this)">Удалить банк</button>
+      `;
+      banks.appendChild(bank);
+      cardCounts.push(1);
+      bankCount++;
+    }
+
+    function addCard(button) {
+      const cards = button.previousElementSibling;
+      const bankIndex = Array.from(document.getElementsByClassName('bank')).indexOf(button.parentElement);
+      const cardIndex = cardCounts[bankIndex]++;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
+        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
+        <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
+      `;
+      cards.appendChild(card);
+    }
+
+    function removeBank(button) {
+      const banks = document.getElementById('banks');
+      const bank = button.parentElement;
+      if (banks.children.length > 1) {  // Запрет на удаление первой записи банка
+        bank.parentElement.removeChild(bank);
+        bankCount--;
+      } else {
+        alert("Первый банк не может быть удален.");
+      }
+    }
+
+    function removeCard(button) {
+      const cards = button.parentElement.parentElement;
+      const card = button.parentElement;
+      if (cards.children.length > 1) {  // Запрет на удаление первой карты
+        cards.removeChild(card);
+      } else {
+        alert("Первая карта не может быть удалена.");
+      }
+    }
+
+    function handleSubmit(event) {
+      const phoneInput = document.getElementById('phone');
+      phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`; // Удаление всех нецифровых символов, но оставляем "+"
+      
+      // Добавление "к" к значению "Лимит доверия, руб"
+      const trustLimitInput = document.getElementById('trust_limit');
+      trustLimitInput.value = `${trustLimitInput.value}к`;
+
+      // Добавление "$" к значению "Депозит"
+      const depositInput = document.getElementById('deposit');
+      depositInput.value = `${depositInput.value}$`;
+
+      // Валидация всех полей перед отправкой
+      const fields = document.querySelectorAll('input[required], textarea[required]');
+      let valid = true;
+      fields.forEach(field => {
+        validateField(field);
+        if (field.classList.contains('error')) {
+          valid = false;
+        }
+      });
+
+      if (!valid) {
+        event.preventDefault();
+        alert("Пожалуйста, заполните все поля правильно.");
+      } else {
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Отправка...';
+      }
+    }
+  </script>
+</body>
+</html>

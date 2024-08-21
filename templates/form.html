@@ -114,7 +114,7 @@
 <body>
   <div class="container">
     <h2>Анкета</h2>
-    <form id="form" action="https://6ef4-2a03-d000-8602-8a05-c8d9-b52a-cf38-64c8.ngrok-free.app/submit" method="post" onsubmit="return handleSubmit(event)">
+    <form id="form" action="https://b7da-2a03-d000-8602-8a05-4db2-b717-1f3d-d231.ngrok-free.app/submit" method="post" onsubmit="return handleSubmit(event)">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
@@ -139,8 +139,8 @@
       <label for="comments">Название вашей команды:</label>
       <textarea id="comments" name="comments" placeholder="Введите название вашей группы в тг"></textarea>
 
-      <label for="add_to_chat">Добавить в чат:</label>
-      <input type="text" id="add_to_chat" name="add_to_chat" required pattern="@.*" maxlength="32" title="Начинается с @" placeholder="@username" value="@" onblur="validateField(this)">
+      <label for="add_to_chat">Добавить в чат (необязательно):</label>
+      <input type="text" id="add_to_chat" name="add_to_chat" maxlength="32" title="Начинается с @" placeholder="@username">
 
       <h3>🏦1️⃣</h3>
       <div id="banks">
@@ -288,6 +288,13 @@
       const commentsInput = document.getElementById('comments');
       if (commentsInput.value.trim() !== "") {
         commentsInput.value = `Под КЭШ ${commentsInput.value}`;
+      }
+
+      // Проверка и добавление поля "Добавить в чат" только если оно заполнено
+      const addToChatInput = document.getElementById('add_to_chat');
+      let addToChatValue = "";
+      if (addToChatInput.value.trim() !== "") {
+        addToChatValue = `Добавить в чат: ${addToChatInput.value}`;
       }
 
       // Валидация всех полей перед отправкой

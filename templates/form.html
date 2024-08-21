@@ -292,9 +292,8 @@
 
       // Проверка и добавление поля "Добавить в чат" только если оно заполнено
       const addToChatInput = document.getElementById('add_to_chat');
-      let addToChatValue = "";
-      if (addToChatInput.value.trim() !== "") {
-        addToChatValue = `Добавить в чат: ${addToChatInput.value}`;
+      if (addToChatInput.value.trim() === "") {
+        addToChatInput.name = ""; // Удаляем имя, чтобы оно не отправлялось
       }
 
       // Валидация всех полей перед отправкой

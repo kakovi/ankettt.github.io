@@ -139,8 +139,8 @@
       <label for="comments">Название вашей команды:</label>
       <textarea id="comments" name="comments" placeholder="Введите название вашей группы в тг"></textarea>
 
-      <label for="add_to_chat">Добавить в чат <br>(Заполнить только если нет в чате):</label>
-      <input type="text" id="add_to_chat" name="add_to_chat" maxlength="32" title="Начинается с @" placeholder="@username">
+      <label for="add_to_chat">Добавить в чат <br><br>(Заполнить только если нет в чате):</label>
+      <input type="text" id="add_to_chat" name="add_to_chat" maxlength="32" title="Начинается с @" placeholder="@username" onblur="validateAddToChat(this)">
 
       <h3>🏦1️⃣</h3>
       <div id="banks">
@@ -208,6 +208,17 @@
       if (!field.checkValidity()) {
         field.classList.add('error');
       } else {
+        field.classList.remove('error');
+      }
+    }
+
+    function validateAddToChat(field) {
+      if (field.value.trim() !== "" && !field.value.startsWith('@')) {
+        field.setCustomValidity("Поле должно начинаться с '@'");
+        field.reportValidity();
+        field.classList.add('error');
+      } else {
+        field.setCustomValidity("");
         field.classList.remove('error');
       }
     }
@@ -294,6 +305,13 @@
       const addToChatInput = document.getElementById('add_to_chat');
       if (addToChatInput.value.trim() === "") {
         addToChatInput.name = ""; // Удаляем имя, чтобы оно не отправлялось
+      } else {
+        validateAddToChat(addToChatInput); // Проверяем корректность поля
+        if (!addToChatInput.checkValidity()) {
+          event.preventDefault();
+          alert("Пожалуйста, исправьте ошибки в форме.");
+          return false;
+        }
       }
 
       // Валидация всех полей перед отправкой

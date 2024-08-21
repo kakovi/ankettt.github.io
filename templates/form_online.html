@@ -39,6 +39,15 @@
     input.error, textarea.error {
       border-color: red;
     }
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
     button {
       width: 100%;
       padding: 10px;
@@ -58,18 +67,54 @@
     button:active {
       transform: scale(0.98);
     }
+    .remove-btn, .add-btn {
+      width: auto;
+      padding: 5px 10px;
+      font-size: 14px;
+      margin-top: 5px;
+      border-radius: 4px;
+    }
+    .remove-btn {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+    }
+    .remove-btn:hover {
+      background: #c82333;
+    }
+    .add-btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+    }
+    .add-btn:hover {
+      background: #0056b3;
+    }
     .bank, .card {
       margin-top: 20px;
       border: 1px solid #ccc;
       border-radius: 4px;
       padding: 10px;
     }
+    .add-bank-btn {
+      background: #00aaff;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    .add-bank-btn:hover {
+      background: #0099e6;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Анкета Онлайн</h2>
-    <form id="form" action="https://ваш_сервер/submit_online" method="post" onsubmit="return handleSubmit(event)">
+    <form id="form" action="https://b7da-2a03-d000-8602-8a05-4db2-b717-1f3d-d231.ngrok-free.app/submit_online" method="post" onsubmit="return handleSubmit(event)">
       <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
@@ -83,7 +128,7 @@
       <input type="text" id="name" name="name" required placeholder="Иванов Иван Иванович">
 
       <label for="deposit">Депозит:</label>
-      <input type="text" id="deposit" name="deposit" required placeholder="Введите сумму" inputmode="numeric">
+      <input type="text" id="deposit" name="deposit" required placeholder="Введите сумму депозита" inputmode="numeric">
 
       <label for="trust_limit">Лимит доверия, в тыс. руб:</label>
       <input type="text" id="trust_limit" name="trust_limit" required placeholder="Введите сумму без 000 в конце" inputmode="numeric">
@@ -94,9 +139,7 @@
       <label for="phone">Телефон:</label>
       <input type="tel" id="phone" name="phone" class="mask-phone" placeholder="+7 (___) ___-__-__" required >
 
-      <label for="comments">Комментарии:</label>
-      <textarea id="comments" name="comments" placeholder="Введите комментарий"></textarea>
-
+      <h3>🏦1️⃣</h3>
       <div id="banks">
         <div class="bank">
           <label for="bank">Банк:</label>
@@ -171,6 +214,7 @@
       const bank = document.createElement('div');
       bank.className = 'bank';
       bank.innerHTML = `
+        <h3>🏦${bankCount + 1}️⃣</h3>
         <label for="bank">Банк:</label>
         <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
 
@@ -233,13 +277,13 @@
       const phoneInput = document.getElementById('phone');
       phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`; // Удаление всех нецифровых символов, но оставляем "+"
       
-      // Добавление "к" к значению "Лимит доверия, руб"
-      const trustLimitInput = document.getElementById('trust_limit');
-      trustLimitInput.value = `${trustLimitInput.value}к`;
-
       // Добавление "$" к значению "Депозит"
       const depositInput = document.getElementById('deposit');
       depositInput.value = `${depositInput.value}$`;
+
+      // Добавление "к" к значению "Лимит доверия, руб"
+      const trustLimitInput = document.getElementById('trust_limit');
+      trustLimitInput.value = `${trustLimitInput.value}к`;
 
       // Валидация всех полей перед отправкой
       const fields = document.querySelectorAll('input[required], textarea[required]');

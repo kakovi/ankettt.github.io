@@ -32,7 +32,16 @@
 <body>
     <div class="container">
         <h2>Ошибка!</h2>
-        <p>{{ error }}</p>
+        <p id="error-message">Произошла ошибка. Пожалуйста, попробуйте снова позже.</p>
     </div>
+
+    <script>
+        // Извлечение параметра ошибки из URL и отображение его на странице
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorMessage = urlParams.get('error');
+        if (errorMessage) {
+            document.getElementById('error-message').textContent = errorMessage;
+        }
+    </script>
 </body>
 </html>

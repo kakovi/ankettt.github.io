@@ -115,7 +115,7 @@
   <div class="container">
     <h2>Анкета Онлайн</h2>
     <form id="form" action="https://28bd-188-162-54-230.ngrok-free.app/submit_online" method="post" onsubmit="return handleSubmit(event)">
-      <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
+     <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
       <label for="chat_number">№ Чата:</label>
@@ -127,17 +127,20 @@
       <label for="name">ФИО:</label>
       <input type="text" id="name" name="name" required placeholder="Иванов Иван Иванович">
 
-      <label for="deposit">Депозит:</label>
-      <input type="text" id="deposit" name="deposit" required placeholder="Введите сумму депозита" inputmode="numeric">
-
-      <label for="trust_limit">Лимит доверия, в тыс. руб:</label>
-      <input type="text" id="trust_limit" name="trust_limit" required placeholder="Введите сумму без 000 в конце" inputmode="numeric">
-
       <label for="imei">IMEI:</label>
       <input type="text" id="imei" name="imei" required pattern="\d{15}" maxlength="15" title="15 значений" placeholder="Введите 15-ти значный №" inputmode="numeric">
 
       <label for="phone">Телефон:</label>
       <input type="tel" id="phone" name="phone" class="mask-phone" placeholder="+7 (___) ___-__-__" required >
+
+      <label for="trust_limit">Лимит доверия, в тыс. руб:</label>
+      <input type="text" id="trust_limit" name="trust_limit" required placeholder="Введите сумму без 000 в конце" inputmode="numeric">
+
+      <label for="comments">Название вашей команды:</label>
+      <textarea id="comments" name="comments" placeholder="Введите название вашей группы в тг"></textarea>
+
+      <label for="add_to_chat">Добавить в чат: <br><br>(Заполнить только если нет в чате)</label>
+      <input type="text" id="add_to_chat" name="add_to_chat" maxlength="32" title="Начинается с @" placeholder="@username" onblur="validateAddToChat(this)">
 
       <h3>🏦1️⃣</h3>
       <div id="banks">

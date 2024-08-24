@@ -268,27 +268,26 @@
       }
     }
 
-    function removeCard(button) {
-      const cards = button.parentElement.parentElement;
-      const card = button.parentElement;
-      if (cards.children.length > 1) {  // Запрет на удаление первой карты
-        cards.removeChild(card);
-      } else {
-        alert("Первая карта не может быть удалена.");
-      }
-    }
-
     function handleSubmit(event) {
       const phoneInput = document.getElementById('phone');
       phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`; // Удаление всех нецифровых символов, но оставляем "+"
       
-      // Добавление "$" к значению "Депозит"
-      const depositInput = document.getElementById('deposit');
-      depositInput.value = `${depositInput.value}$`;
-
       // Добавление "к" к значению "Лимит доверия, руб"
       const trustLimitInput = document.getElementById('trust_limit');
       trustLimitInput.value = `${trustLimitInput.value}к`;
+
+      // Проверка и добавление поля "Добавить в чат" только если оно заполнено
+      const addToChatInput = document.getElementById('add_to_chat');
+      if (addToChatInput.value.trim() === "") {
+        addToChatInput.name = ""; // Удаляем имя, чтобы оно не отправлялось
+      } else {
+        validateAddToChat(addToChatInput); // Проверяем корректность поля
+        if (!addToChatInput.checkValidity()) {
+          event.preventDefault();
+          alert("Пожалуйста, исправьте ошибки в форме.");
+          return false;
+        }
+      }
 
       // Валидация всех полей перед отправкой
       const fields = document.querySelectorAll('input[required], textarea[required]');

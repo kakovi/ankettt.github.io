@@ -118,6 +118,9 @@
      <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
       <input type="hidden" id="owner_id" name="owner_id" value="@helper_kong"> <!-- Скрытое поле с постоянным значением -->
 
+      <label for="owner_id">Админ в чате:</label>
+      <input type="text" id="owner_id" name="owner_id" maxlength="32" title="Начинается с @" placeholder="@username" onblur="validateAddToChat(this)">
+
       <label for="chat_number">№ Чата:</label>
       <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 значений" placeholder="Введите 3-4 значный №" inputmode="numeric">
 

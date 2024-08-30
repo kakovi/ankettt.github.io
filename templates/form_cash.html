@@ -113,7 +113,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>Анкета</h2>
+    <h2>Анкетааа</h2>
     <form id="form" action="https://28bd-188-162-54-230.ngrok-free.app/submit_cash" method="post" onsubmit="return handleSubmit(event)">
      <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
 
@@ -174,17 +174,20 @@
     $(document).ready(function(){
         $('.mask-phone').mask('+7 (999) 999-99-99');
 
+        // Установить курсор в начало при фокусе на поле телефона
         $('#phone').focus(function(){
             let $this = $(this);
             setTimeout(function(){
-                $this[0].setSelectionRange(4, 4);
+                $this[0].setSelectionRange(4, 4); // Установить курсор после +7
             }, 10);
         });
 
+        // Проверка всех полей на правильность при потере фокуса
         $('input, textarea').on('blur', function() {
             validateField(this);
         });
 
+        // Запрет на ввод нецифровых символов
         $('input[inputmode="numeric"]').on('input', function() {
             this.value = this.value.replace(/\D/g, '');
         });
@@ -193,12 +196,11 @@
     let bankCount = 1;
     let cardCounts = [1];
 
-    window.onload = function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const chat_id = urlParams.get('chat_id');
-      document.getElementById('chat_id').value = chat_id;
-      console.log("Значение chat_id:", chat_id);  // Вывод в консоль для проверки
-    };
+    // Устанавливаем значение chat_id из WebAppData
+    window.Telegram.WebApp.onEvent('data', function(webAppData) {
+        const data = JSON.parse(webAppData);
+        document.getElementById('chat_id').value = data.chat_id;
+    });
 
     function validateField(field) {
       if (!field.checkValidity()) {
@@ -265,7 +267,7 @@
     function removeBank(button) {
       const banks = document.getElementById('banks');
       const bank = button.parentElement;
-      if (banks.children.length > 1) { 
+      if (banks.children.length > 1) {  // Запрет на удаление первой записи банка
         bank.parentElement.removeChild(bank);
         bankCount--;
       } else {
@@ -276,7 +278,7 @@
     function removeCard(button) {
       const cards = button.parentElement.parentElement;
       const card = button.parentElement;
-      if (cards.children.length > 1) { 
+      if (cards.children.length > 1) {  // Запрет на удаление первой карты
         cards.removeChild(card);
       } else {
         alert("Первая карта не может быть удалена.");
@@ -285,21 +287,24 @@
 
     function handleSubmit(event) {
       const phoneInput = document.getElementById('phone');
-      phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`;
+      phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`; // Удаление всех нецифровых символов, но оставляем "+"
       
+      // Добавление "к" к значению "Лимит доверия, руб"
       const trustLimitInput = document.getElementById('trust_limit');
       trustLimitInput.value = `${trustLimitInput.value}к`;
 
+      // Добавление "Под КЭШ" в начало комментариев
       const commentsInput = document.getElementById('comments');
       if (commentsInput.value.trim() !== "") {
         commentsInput.value = `Под КЭШ ${commentsInput.value}`;
       }
 
+      // Проверка и добавление поля "Добавить в чат" только если оно заполнено
       const addToChatInput = document.getElementById('add_to_chat');
       if (addToChatInput.value.trim() === "") {
-        addToChatInput.name = ""; 
+        addToChatInput.name = ""; // Удаляем имя, чтобы оно не отправлялось
       } else {
-        validateAddToChat(addToChatInput);
+        validateAddToChat(addToChatInput); // Проверяем корректность поля
         if (!addToChatInput.checkValidity()) {
           event.preventDefault();
           alert("Пожалуйста, исправьте ошибки в форме.");
@@ -307,6 +312,7 @@
         }
       }
 
+      // Валидация всех полей перед отправкой
       const fields = document.querySelectorAll('input[required], textarea[required]');
       let valid = true;
       fields.forEach(field => {

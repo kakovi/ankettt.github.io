@@ -113,9 +113,9 @@
 </head>
 <body>
   <div class="container">
-    <h2>Анкетааа</h2>
-    <form id="form" action="https://28bd-188-162-54-230.ngrok-free.app/submit_cash" method="post" onsubmit="return handleSubmit(event)">
-     <input type="hidden" id="chat_id" name="chat_id"> <!-- Скрытое поле для chat_id -->
+    <h2>Анкетабб</h2>
+    <form id="form" action="/submit_cash" method="post" onsubmit="return handleSubmit(event)"> <!-- Скрытое поле для chat_id -->
+      <input type="hidden" name="chat_id" value="{{ chat_id }}">
 
       <label for="chat_number">№ Чата:</label>
       <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 значений" placeholder="Введите 3-4 значный №" inputmode="numeric">

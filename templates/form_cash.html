@@ -28,7 +28,7 @@
       margin-top: 10px;
     }
     input[type="text"], input[type="email"], input[type="tel"], textarea {
-      width: calc(100% - 22px);
+      width: calc(100% - 22px); /* Учитывая padding */
       padding: 10px;
       margin-top: 5px;
       border: 1px solid #ccc;
@@ -113,10 +113,9 @@
 </head>
 <body>
   <div class="container">
-    <h2>Анкетаццы</h2>
-    <form id="form" action="https://28bd-188-162-54-230.ngrok-free.app/submit_cash" method="post" onsubmit="return handleSubmit(event)">
-      <!-- Скрытое поле для chat_id -->
-      <input type="hidden" name="chat_id" value="{{ chat_id }}">
+    <h2>Анкета КЭШ</h2>
+    <form id="form" action="/submit_cash" method="post" onsubmit="return handleSubmit(event)">
+     <input type="hidden" id="chat_id" name="chat_id">
 
       <label for="chat_number">№ Чата:</label>
       <input type="text" id="chat_number" name="chat_number" required pattern="\d{3,4}" maxlength="4" title="От 3 до 4 значений" placeholder="Введите 3-4 значный №" inputmode="numeric">
@@ -175,17 +174,20 @@
     $(document).ready(function(){
         $('.mask-phone').mask('+7 (999) 999-99-99');
 
+        // Установить курсор в начало при фокусе на поле телефона
         $('#phone').focus(function(){
             let $this = $(this);
             setTimeout(function(){
-                $this[0].setSelectionRange(4, 4); 
+                $this[0].setSelectionRange(4, 4); // Установить курсор после +7
             }, 10);
         });
 
+        // Проверка всех полей на правильность при потере фокуса
         $('input, textarea').on('blur', function() {
             validateField(this);
         });
 
+        // Запрет на ввод нецифровых символов
         $('input[inputmode="numeric"]').on('input', function() {
             this.value = this.value.replace(/\D/g, '');
         });
@@ -194,130 +196,135 @@
     let bankCount = 1;
     let cardCounts = [1];
 
+    // Устанавливаем значение chat_id при загрузке страницы
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const chat_id = urlParams.get('chat_id');
+        document.getElementById('chat_id').value = chat_id;
+    };
+
     function validateField(field) {
-      if (!field.checkValidity()) {
-        field.classList.add('error');
-      } else {
-        field.classList.remove('error');
-      }
+        if (!field.checkValidity()) {
+            field.classList.add('error');
+        } else {
+            field.classList.remove('error');
+        }
     }
 
     function validateAddToChat(field) {
-      if (field.value.trim() !== "" && !field.value.startsWith('@')) {
-        field.setCustomValidity("Поле должно начинаться с '@'");
-        field.reportValidity();
-        field.classList.add('error');
-      } else {
-        field.setCustomValidity("");
-        field.classList.remove('error');
-      }
+        if (field.value.trim() !== "" && !field.value.startsWith('@')) {
+            field.setCustomValidity("Поле должно начинаться с '@'");
+            field.reportValidity();
+            field.classList.add('error');
+        } else {
+            field.setCustomValidity("");
+            field.classList.remove('error');
+        }
     }
 
     function addBank() {
-      const banks = document.getElementById('banks');
-      const bank = document.createElement('div');
-      bank.className = 'bank';
-      bank.innerHTML = `
-        <h3>🏦${bankCount + 1}️⃣</h3>
-        <label for="bank">Банк:</label>
-        <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
+        const banks = document.getElementById('banks');
+        const bank = document.createElement('div');
+        bank.className = 'bank';
+        bank.innerHTML = `
+            <h3>🏦${bankCount + 1}️⃣</h3>
+            <label for="bank">Банк:</label>
+            <input type="text" name="banks[${bankCount}][bank]" required placeholder="Введите название банка">
 
-        <label for="account1">Счет 1:</label>
-        <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" inputmode="numeric">
+            <label for="account1">Счет 1:</label>
+            <input type="text" name="banks[${bankCount}][account]" required pattern="\\d{20}" maxlength="20" title="20 цифр без пробелов" placeholder="Введите номер счета" inputmode="numeric">
 
-        <label for="bik1">БИК:</label>
-        <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" inputmode="numeric">
+            <label for="bik1">БИК:</label>
+            <input type="text" name="banks[${bankCount}][bik]" required pattern="\\d{9}" maxlength="9" title="9 цифр без пробелов" placeholder="Введите БИК" inputmode="numeric">
 
-        <div class="cards">
-          <div class="card">
-            <label for="card1">Карта 1:</label>
-            <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
-          </div>
-        </div>
-        <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
-        <button type="button" class="remove-btn" onclick="removeBank(this)">Удалить банк</button>
-      `;
-      banks.appendChild(bank);
-      cardCounts.push(1);
-      bankCount++;
+            <div class="cards">
+                <div class="card">
+                    <label for="card1">Карта 1:</label>
+                    <input type="text" name="banks[${bankCount}][cards][0]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
+                </div>
+            </div>
+            <button type="button" class="add-btn" onclick="addCard(this)">Добавить карту</button>
+            <button type="button" class="remove-btn" onclick="removeBank(this)">Удалить банк</button>
+        `;
+        banks.appendChild(bank);
+        cardCounts.push(1);
+        bankCount++;
     }
 
     function addCard(button) {
-      const cards = button.previousElementSibling;
-      const bankIndex = Array.from(document.getElementsByClassName('bank')).indexOf(button.parentElement);
-      const cardIndex = cardCounts[bankIndex]++;
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
-        <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
-        <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
-      `;
-      cards.appendChild(card);
+        const cards = button.previousElementSibling;
+        const bankIndex = Array.from(document.getElementsByClassName('bank')).indexOf(button.parentElement);
+        const cardIndex = cardCounts[bankIndex]++;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <label for="card${cardIndex + 1}">Карта ${cardIndex + 1}:</label>
+            <input type="text" name="banks[${bankIndex}][cards][${cardIndex}]" required pattern="\\d{13,19}" maxlength="19" title="От 13 до 19 цифр без пробелов" placeholder="Введите номер карты" inputmode="numeric">
+            <button type="button" class="remove-btn" onclick="removeCard(this)">Удалить карту</button>
+        `;
+        cards.appendChild(card);
     }
 
     function removeBank(button) {
-      const banks = document.getElementById('banks');
-      const bank = button.parentElement;
-      if (banks.children.length > 1) {
-        bank.parentElement.removeChild(bank);
-        bankCount--;
-      } else {
-        alert("Первый банк не может быть удален.");
-      }
+        const banks = document.getElementById('banks');
+        const bank = button.parentElement;
+        if (banks.children.length > 1) {  // Запрет на удаление первой записи банка
+            bank.parentElement.removeChild(bank);
+            bankCount--;
+        } else {
+            alert("Первый банк не может быть удален.");
+        }
     }
 
     function removeCard(button) {
-      const cards = button.parentElement.parentElement;
-      const card = button.parentElement;
-      if (cards.children.length > 1) {
-        cards.removeChild(card);
-      } else {
-        alert("Первая карта не может быть удалена.");
-      }
+        const cards = button.parentElement.parentElement;
+        const card = button.parentElement;
+        if (cards.children.length > 1) {  // Запрет на удаление первой карты
+            cards.removeChild(card);
+        } else {
+            alert("Первая карта не может быть удалена.");
+        }
     }
 
     function handleSubmit(event) {
-      const phoneInput = document.getElementById('phone');
-      phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`;
-      
-      const trustLimitInput = document.getElementById('trust_limit');
-      trustLimitInput.value = `${trustLimitInput.value}к`;
+        const phoneInput = document.getElementById('phone');
+        phoneInput.value = `+${phoneInput.value.replace(/\D/g, '')}`; // Удаление всех нецифровых символов, но оставляем "+"
+        
+        // Добавление "к" к значению "Лимит доверия, руб"
+        const trustLimitInput = document.getElementById('trust_limit');
+        trustLimitInput.value = `${trustLimitInput.value}к`;
 
-      const commentsInput = document.getElementById('comments');
-      if (commentsInput.value.trim() !== "") {
-        commentsInput.value = `Под КЭШ ${commentsInput.value}`;
-      }
-
-      const addToChatInput = document.getElementById('add_to_chat');
-      if (addToChatInput.value.trim() === "") {
-        addToChatInput.name = "";
-      } else {
-        validateAddToChat(addToChatInput);
-        if (!addToChatInput.checkValidity()) {
-          event.preventDefault();
-          alert("Пожалуйста, исправьте ошибки в форме.");
-          return false;
+        // Проверка и добавление поля "Добавить в чат" только если оно заполнено
+        const addToChatInput = document.getElementById('add_to_chat');
+        if (addToChatInput.value.trim() === "") {
+            addToChatInput.name = ""; // Удаляем имя, чтобы оно не отправлялось
+        } else {
+            validateAddToChat(addToChatInput); // Проверяем корректность поля
+            if (!addToChatInput.checkValidity()) {
+                event.preventDefault();
+                alert("Пожалуйста, исправьте ошибки в форме.");
+                return false;
+            }
         }
-      }
 
-      const fields = document.querySelectorAll('input[required], textarea[required]');
-      let valid = true;
-      fields.forEach(field => {
-        validateField(field);
-        if (field.classList.contains('error')) {
-          valid = false;
+        // Валидация всех полей перед отправкой
+        const fields = document.querySelectorAll('input[required], textarea[required]');
+        let valid = true;
+        fields.forEach(field => {
+            validateField(field);
+            if (field.classList.contains('error')) {
+                valid = false;
+            }
+        });
+
+        if (!valid) {
+            event.preventDefault();
+            alert("Пожалуйста, заполните все поля правильно.");
+        } else {
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
         }
-      });
-
-      if (!valid) {
-        event.preventDefault();
-        alert("Пожалуйста, заполните все поля правильно.");
-      } else {
-        const submitBtn = document.getElementById('submit-btn');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Отправка...';
-      }
     }
   </script>
 </body>

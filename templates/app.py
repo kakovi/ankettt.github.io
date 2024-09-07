@@ -13,9 +13,9 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # Загрузка переменных окружения
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-MANAGER_CHAT_ID = os.getenv('MANAGER_CHAT_ID')
-SPREADSHEET_URL = os.getenv('SPREADSHEET_URL')
+TELEGRAM_BOT_TOKEN = os.getenv('7498464182:AAFLg-D0LSJ-5PVRlD-AfOmQPFZC8GKpOKc')
+MANAGER_CHAT_ID = os.getenv('-4568620668')
+SPREADSHEET_URL = os.getenv('https://docs.google.com/spreadsheets/d/1gv_CBblTjobMk2xR_1S0b61dsezAXjUqPKe82Pde0jI/edit?gid=0#gid=0')
 
 # Загрузка учетных данных для Google Sheets из переменной окружения
 keyfile_dict = json.loads(os.getenv("GOOGLE_SHEETS_CREDENTIALS"))

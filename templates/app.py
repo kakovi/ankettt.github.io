@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify, redirect
 import requests
-import json
 import gspread
 from google.oauth2 import service_account
 import os
 import logging
+import json
 from urllib.parse import urlencode
 
 app = Flask(__name__)
@@ -13,11 +13,11 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # Загрузка переменных окружения
-TELEGRAM_BOT_TOKEN = os.getenv('7498464182:AAFLg-D0LSJ-5PVRlD-AfOmQPFZC8GKpOKc')
-MANAGER_CHAT_ID = os.getenv('-4568620668')
-SPREADSHEET_URL = os.getenv('https://docs.google.com/spreadsheets/d/1gv_CBblTjobMk2xR_1S0b61dsezAXjUqPKe82Pde0jI/edit?gid=0#gid=0')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+MANAGER_CHAT_ID = os.getenv('MANAGER_CHAT_ID')
+SPREADSHEET_URL = os.getenv('SPREADSHEET_URL')
 
-# Загрузка Google Sheets credentials из переменной окружения
+# Загрузка учетных данных для Google Sheets из переменной окружения
 keyfile_dict = json.loads(os.getenv("GOOGLE_SHEETS_CREDENTIALS"))
 creds = service_account.Credentials.from_service_account_info(keyfile_dict)
 file = gspread.authorize(creds)
@@ -40,6 +40,7 @@ def check_duplicates(accounts, cards):
     """
     Проверка на наличие дубликатов карт и счетов в Google Sheets
     """
+    # Получаем все строки из Google Sheets для столбцов A и E
     all_values_a = sheet.col_values(1)  # Столбец A для анкет КЭШ
     all_values_e = sheet.col_values(5)  # Столбец E для анкет Онлайн
     all_values = all_values_a + all_values_e  # Объединяем значения для проверки
@@ -144,7 +145,7 @@ def submit_online():
             f"Депозит:\n"
         )
 
-        if 'add_to_chat' в data и data['add_to_chat'][0].strip() != "":
+        if 'add_to_chat' in data and data['add_to_chat'][0].strip() != "":
             form_data += f"Добавить в чат: {data['add_to_chat'][0]}\n"
 
         for i in range(len(accounts)):
